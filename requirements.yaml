@@ -1,0 +1,160 @@
+init-board:
+  title: Initialize the game
+  description: >-
+    Implement the `Game` constructor to initialize empty `n`-by-`m` board,
+    i.e. an array of arrays filled with zeros. The inner arrays are rows.
+  tags: [java-1, data-structures-1]
+  criteria:
+    - An array of integer arrays (representing an array of rows) is created as the board,
+      and stored as a private member of the `Game` instance
+    - Every cell of the board is initialized with `0`
+    - Getter `getBoard()` and setter `setBoard()` is connected to the stored board
+    - The rows of the board are independent (changing one row doesn't affect the others)
+
+get-move:
+  title: Get players' move
+  description: >-
+    Implement `getMove()` that asks for user input and returns the coordinates of
+    a valid move on board.
+  tags: [java-1]
+  criteria:
+    - >-
+      The player specifies coordinates as letter and number: `A2` is first
+      row and second column, `C1` is third row and first column, etc.
+    - The function returns an array of integers containing the row and column number corresponding to the input
+    - The returned coordinates start from 0
+    - The integers indicate a valid (empty) position on the board
+    - If the user provides coordinates that are outside of board, keep asking
+    - If the user provides coordinates for a place that is taken, keep asking
+
+mark:
+  title: Implement making a move
+  description: >-
+    Implement `mark()` that writes the value of `player` (a `1` or `2`) into the
+    `row` & `col` element of the board.
+  tags: [python-1]
+  criteria:
+    - If the cell at `row` and `col` is empty, it is marked with `player`
+    - It does not do anything if the coordinates are out of bounds
+    - It does not do anything if the cell is already marked
+
+has-won:
+  title: Check for winners
+  description: >-
+    Implement `hasWon()` that returns `true` if `player` (of value `1` or `2`)
+    has `howMany` marks in a row on the board.
+  tags: [java-1]
+  criteria:
+    - Returns `true` if `player` has `howMany` marks in a row on the board.
+    - Returns `false` if `player` doesn't have `howMany` marks in a row on the board.
+
+is-full:
+  title: Check for a full board
+  description: >-
+    Implement `isFull()` that returns `true` if the board is full.
+  tags: [java-1]
+  criteria:
+    - Returns `true` if there are no empty fields on the board
+    - Returns `false` otherwise
+
+print-board:
+  title: Print board
+  description: >-
+    Implement `printBoard()` that prints the board to the screen.
+  tags: [java-1]
+  criteria:
+    - Players 1 and 2 are indicated with `X` and `O`
+    - Empty fields are indicated with dots (`.`)
+    - There are coordinates displayed around the board
+    - |-
+      A 3-by-8 board is displayed in this format:
+      ```
+         1  2  3  4  5  6  7  8
+      A  .  .  .  .  .  .  .  .
+      B  .  .  .  .  .  .  .  .
+      C  .  .  .  .  .  .  .  .
+      ```
+
+print-result:
+  title: Print result
+  description: >-
+    Implement `printResult()` that displays the result of the game.
+  tags: [java-1]
+  criteria:
+    - If player 1 wins, print "X won!"
+    - If player 2 wins, print "O won!"
+    - If nobody wins, print "It's a tie!"
+
+tictactoe-game:
+  title: Game logic
+  description: >-
+    Use the implemented methods to write a `play()` method
+    that will run a whole 2-players game. Parameter `howMany`
+    sets the win condition of the game.
+  tags: [java-1]
+  criteria:
+    - Player 1 starts the game
+    - Players alternate their moves (1, 2, 1, 2...)
+    - The game uses `howMany` to set the win condition
+    - The board is displayed before each move and also at the end of game
+    - The game ends when someone wins or the board is full
+    - The game handles bad input (wrong coordinates) without crashing
+
+quit:
+  title: Quit game
+  description: >-
+    Allow players to quit the game anytime by typing `quit`.
+  tags: [java-1]
+  criteria:
+    - When the player types `quit` instead of coordinates, the program exits.
+
+ai-player:
+  title: AI can play
+  description: >-
+    Implement player-against-AI mode.
+  tags: [python-1]
+  criteria:
+    - The game is fully playable against the computer, AI can play any of the players.
+      This means that when `enableAi()` is set for a player number then
+      it calls `getAiMove()` instead of `getMove()` for that player.
+    - Method `getAiMove()` returns a valid move (if possible) without
+      asking for any input
+    - Method `getAiMove()` returns `null` if board is full
+    - Game play is easy to follow as there is a 1 second delay before each AI move
+      implemented in method `play()`
+
+
+ai-goes-for-easy-win:
+  title: AI goes for easy win
+  description: >-
+    AI is capable of recognizing the easiest opportunities to win the game with one move.
+  tags: [java-2]
+  criteria:
+    - Method `getAiMove()` picks the winning move if there is one on the board
+
+ai-prevents-easy-lose:
+  title: AI prevents easy lose
+  description: >-
+    AI is capable of recognizing if its enemy could win the game with the next move,
+    and (supposing there is no direct winning move) moves against it.
+  tags: [java-2]
+  criteria:
+    - Method `getAiMove()` (when there is no winning move in one step) picks a move which prevents a certain winning move for its enemy
+    - When there is a direct winning move, function `getAiMove()` still picks that
+    - When there are multiple one-step winning options for the enemy, `getAiMove()` tries to prevent one of them
+
+ai-clever:
+  title: A somewhat clever AI
+  description: >-
+    AI tries to look ahead more than one move. Be aware that a serious AI
+    would follow more complicated strategies.
+  tags: [java-2]
+  extra: yes
+  criteria:
+    - If there are no direct winning or loosing options, AI should
+      pick an option that potentionally creates a direct winning option for the next round
+    - As an addition to the above, if possible, AI should pick an option that
+       potentionally creates _more than one_ direct winning options for the next round
+      (thus ensuring the victory)
+    - When none of the above options are possible, AI picks a cell that is
+      neighbouring an already marked cell
