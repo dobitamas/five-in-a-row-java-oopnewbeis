@@ -1,6 +1,7 @@
 package com.codecool.fiveinarow;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Game implements GameInterface {
 
@@ -16,6 +17,7 @@ public class Game implements GameInterface {
 //                {0,0,0},
 //        };
         printBoard();
+        getMove(1);
     }
 
     public int[][] getBoard() {
@@ -45,8 +47,17 @@ public class Game implements GameInterface {
     }
 
     public int[] getMove(int player) {
-
-        return null;
+        Scanner input =new Scanner(System.in);
+        System.out.println("Take your move, " +player +"!");
+        System.out.println("Enter a number: ");
+        int[] result = new int[3];
+        int number = input.nextInt() -1;
+        System.out.println("Enter a letter: ");
+        char letter = input.next().charAt(0);
+        result[0] = player;
+        result[1] = number;
+        result[2] = converter(letter);
+        return result;
     }
 
     public int[] getAiMove(int player) {
@@ -105,5 +116,10 @@ public class Game implements GameInterface {
     }
 
     public void play(int howMany) {
+    }
+
+    public int converter(char letter) {
+        int temp_integer = 96;
+        return (int)letter - temp_integer;
     }
 }
