@@ -17,7 +17,7 @@ public class Game implements GameInterface {
 //                {0,0,0},
 //        };
         printBoard();
-        getMove(1);
+        handleTurn();
     }
 
     public int[][] getBoard() {
@@ -29,18 +29,26 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public void handleTurn(int howMany){
+    public void handleTurn(){
         int player1 = 1;
         int player2 = 2;
-        boolean turn = false;
+        boolean turn = true;
         while (!isFull()){
             if (turn) {
-               getMove(player1);
-               hasWon(player1, howMany);
+               int [] coordinates = getMove(player1);
+               int coordinateX = coordinates[0];
+               int coordinateY = coordinates[1];
+               mark(player1, coordinateX, coordinateY);
+               printBoard();
+//               hasWon(player1, howMany);
                turn = false;
             } else {
-                getMove(player2);
-                hasWon(player2, howMany);
+                int [] coordinates = getMove(player2);
+                int coordinateX = coordinates[0];
+                int coordinateY = coordinates[1];
+                mark(player2, coordinateX, coordinateY);
+                printBoard();
+//                hasWon(player2, howMany);
                 turn = true;
             }
         }
@@ -54,9 +62,8 @@ public class Game implements GameInterface {
         int number = input.nextInt() -1;
         System.out.println("Enter a letter: ");
         char letter = input.next().charAt(0);
-        result[0] = player;
-        result[1] = number;
-        result[2] = converter(letter);
+        result[0] = number;
+        result[1] = converter(letter);
         return result;
     }
 
@@ -119,7 +126,7 @@ public class Game implements GameInterface {
     }
 
     public int converter(char letter) {
-        int temp_integer = 96;
+        int temp_integer = 97;
         return (int)letter - temp_integer;
     }
 }
