@@ -37,11 +37,11 @@ public class Game implements GameInterface {
             if (turn) {
                getMove(player1);
                hasWon(player1, howMany);
-               turn = true;
+               turn = false;
             } else {
                 getMove(player2);
                 hasWon(player2, howMany);
-                turn = false;
+                turn = true;
             }
         }
     }
