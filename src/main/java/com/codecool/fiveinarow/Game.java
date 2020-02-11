@@ -41,7 +41,7 @@ public class Game implements GameInterface {
                 mark(player1, coordinateX, coordinateY);
                 printBoard();
                 if (hasWon(player1, howMany, coordinateX, coordinateY)){
-                    System.out.println(player1 + " has won");
+                    printResult(player1);
                     break;
                 }
                 turn = false;
@@ -53,7 +53,7 @@ public class Game implements GameInterface {
                 mark(player2, coordinateX, coordinateY);
                 printBoard();
                 if (hasWon(player2, howMany, coordinateX, coordinateY)){
-                    System.out.println(player2 + " has won");
+                    printResult(player2);
                     break;
                 }
                 turn = true;
@@ -93,28 +93,16 @@ public class Game implements GameInterface {
         int count = 0;
         int colLenght = board[1].length;
         int rowLenght = board.length;
-        for ( col = 0; col < colLenght ; col++) {
-            if(board[coordinateX][col] == player){
-                count++;
-            } else {
-                count = 0;
-            }
-            if(count == howMany){
-                return true;
-            }
+
+        if(checkDirections(colLenght, coordinateX, player, howMany, "Horizontal")){
+            return true;
         }
-        for ( row = 0; row < rowLenght; row++) {
-            if(board[row][coordinateY] == player){
-                count++;
-            }else{
-                count = 0;
-            }
-            if(count == howMany){
-                return true;
-            }
+        if(checkDirections(rowLenght, coordinateY, player, howMany, "Vertical")){
+            return true;
         }
-        for (int startOfRow = 0; startOfRow < colLenght - howMany ; startOfRow++){
-            for (row = startOfRow, col = 0; row < colLenght && col < rowLenght; row++, col++) {
+
+        for (int startOfRow = 0; startOfRow < rowLenght - howMany ; startOfRow++){
+            for (row = startOfRow, col = 0; row < rowLenght && col < colLenght; row++, col++) {
                 if(board[row][col] == player){
                     count++;
                 }else{
@@ -125,8 +113,8 @@ public class Game implements GameInterface {
                 }
             }
         }
-        for (int startOfCol = 1; startOfCol < rowLenght - howMany ; startOfCol++) {
-            for ( col = startOfCol, row = 0; col < rowLenght && row < colLenght ; row++, col++) {
+        for (int startOfCol = 1; startOfCol < colLenght - howMany ; startOfCol++) {
+            for ( col = startOfCol, row = 0; col < colLenght && row < rowLenght ; row++, col++) {
                 if(board[row][col] == player){
                     count++;
                 }else{
@@ -173,6 +161,11 @@ public class Game implements GameInterface {
     }
 
     public void printResult(int player) {
+        if(player == 1){
+            System.out.println("\u001B[32m" +" The player with the O has won" + "\u001B[32m");
+        } else if(player == 2){
+            System.out.println("\u001B[36m" +" The player with the X has won" + "\u001B[36m");
+        }
     }
 
     public void enableAi(int player) {
@@ -186,5 +179,35 @@ public class Game implements GameInterface {
     public int converter(char letter) {
         int temp_integer = 97;
         return (int)letter - temp_integer;
+    }
+
+
+    public boolean checkDirections (int length, int coordinate, int player, int howMany, String direction){
+        if (direction.equals("Horizontal")) {
+            int countHorizontal = 0;
+            for (int col = 0; col < length ; col++) {
+                if(board[coordinate][col] == player){
+                    countHorizontal++;
+                } else {
+                    countHorizontal = 0;
+                }
+                if(countHorizontal == howMany){
+                    return true;
+                }
+            }
+        } else if (direction.equals("Vertical")){
+            int countVertical = 0;
+            for (int row = 0; row < length; row++) {
+                if (board[row][coordinate] == player) {
+                    countVertical++;
+                } else {
+                    countVertical = 0;
+                }
+                if (countVertical == howMany) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
