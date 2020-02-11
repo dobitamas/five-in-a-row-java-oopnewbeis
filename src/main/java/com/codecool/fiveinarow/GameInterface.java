@@ -6,11 +6,10 @@ package com.codecool.fiveinarow;
 public interface GameInterface {
     void setBoard(int[][] board);
     int[][] getBoard();
-
     int[] getMove(int player);
     int[] getAiMove(int player);
     void mark(int player, int row, int col);
-    boolean hasWon(int player, int howMany);
+    boolean hasWon(int player, int howMany, int coordinateX, int coordinateY);
     boolean isFull();
     void printBoard();
     void printResult(int player);

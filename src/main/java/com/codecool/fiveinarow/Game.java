@@ -1,5 +1,6 @@
 package com.codecool.fiveinarow;
 
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -16,8 +17,6 @@ public class Game implements GameInterface {
 //                {2,0,1},
 //                {0,0,0},
 //        };
-        printBoard();
-        handleTurn();
     }
 
     public int[][] getBoard() {
@@ -29,26 +28,34 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public void handleTurn(){
+    public void handleTurn(int howMany){
         int player1 = 1;
         int player2 = 2;
         boolean turn = true;
         while (!isFull()){
             if (turn) {
-               int [] coordinates = getMove(player1);
-               int coordinateX = coordinates[0];
-               int coordinateY = coordinates[1];
-               mark(player1, coordinateX, coordinateY);
-               printBoard();
-//               hasWon(player1, howMany);
-               turn = false;
+                System.out.print("\033[H\033[2J"); //TODO in fact this clears the terminal screen. Need to be tried!
+                int [] coordinates = getMove(player1);
+                int coordinateX = coordinates[0];
+                int coordinateY = coordinates[1];
+                mark(player1, coordinateX, coordinateY);
+                printBoard();
+                if (hasWon(player1, howMany, coordinateX, coordinateY)){
+                    System.out.println(player1 + " has won");
+                    break;
+                }
+                turn = false;
             } else {
+                System.out.print("\033[H\033[2J");
                 int [] coordinates = getMove(player2);
                 int coordinateX = coordinates[0];
                 int coordinateY = coordinates[1];
                 mark(player2, coordinateX, coordinateY);
                 printBoard();
-//                hasWon(player2, howMany);
+                if (hasWon(player2, howMany, coordinateX, coordinateY)){
+                    System.out.println(player2 + " has won");
+                    break;
+                }
                 turn = true;
             }
         }
@@ -80,7 +87,56 @@ public class Game implements GameInterface {
         }
     }
 
-    public boolean hasWon(int player, int howMany) {
+    public boolean hasWon(int player, int howMany, int coordinateX, int coordinateY) {
+        int row;
+        int col;
+        int count = 0;
+        int colLenght = board[1].length;
+        int rowLenght = board.length;
+        for ( col = 0; col < colLenght ; col++) {
+            if(board[coordinateX][col] == player){
+                count++;
+            } else {
+                count = 0;
+            }
+            if(count == howMany){
+                return true;
+            }
+        }
+        for ( row = 0; row < rowLenght; row++) {
+            if(board[row][coordinateY] == player){
+                count++;
+            }else{
+                count = 0;
+            }
+            if(count == howMany){
+                return true;
+            }
+        }
+        for (int startOfRow = 0; startOfRow < colLenght - howMany ; startOfRow++){
+            for (row = startOfRow, col = 0; row < colLenght && col < rowLenght; row++, col++) {
+                if(board[row][col] == player){
+                    count++;
+                }else{
+                    count = 0;
+                }
+                if (count == howMany) {
+                    return true;
+                }
+            }
+        }
+        for (int startOfCol = 1; startOfCol < rowLenght - howMany ; startOfCol++) {
+            for ( col = startOfCol, row = 0; col < rowLenght && row < colLenght ; row++, col++) {
+                if(board[row][col] == player){
+                    count++;
+                }else{
+                    count = 0;
+                }
+                if(count == howMany){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -92,7 +148,7 @@ public class Game implements GameInterface {
     public void printBoard() {
 
         char[] alphabet = " abcdefghijklmnopqrstuvwxyz".toCharArray();
-        char[] header = Arrays.copyOfRange(alphabet,0, board.length + 1);
+        char[] header = Arrays.copyOfRange(alphabet,0, board[1].length + 1);
         for (char c : header) {
             System.out.print(String.valueOf(c) + '\t');
         }
@@ -123,6 +179,8 @@ public class Game implements GameInterface {
     }
 
     public void play(int howMany) {
+        printBoard();
+        handleTurn(howMany);
     }
 
     public int converter(char letter) {
