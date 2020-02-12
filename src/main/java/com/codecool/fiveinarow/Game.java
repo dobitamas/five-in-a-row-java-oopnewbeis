@@ -40,12 +40,17 @@ public class Game implements GameInterface {
                 turn = false;
             } else {
                 if (AI) {
-                    double coordinateX = (Math.random()*(board.length - 1));
-                    double coordinateY = (Math.random()*(board.length - 1));
-                    checkIfValidMove((int) coordinateX,(int) coordinateY);
-                    mark(player2,(int)coordinateX,(int) coordinateY);
+                    double coordinateX = (Math.random() * (board.length - 1));
+                    double coordinateY = (Math.random() * (board.length - 1));
+                    while (!checkIfValidMove((int)coordinateX,(int)coordinateY)) {
+                        coordinateX = (Math.random() * (board.length - 1));
+                        coordinateY = (Math.random() * (board.length - 1));
+                    }
+                    int X = (int)coordinateX;
+                    int Y = (int)coordinateY;
+                    mark(player2,X,Y);
                     printBoard();
-                    if (hasWon(player2, howMany, (int) coordinateX,(int) coordinateY)) {
+                    if (hasWon(player2, howMany, X, Y)) {
                         printResult(player2);
                         break;
                     }
@@ -74,13 +79,15 @@ public class Game implements GameInterface {
         System.out.println("Take your move, " +player +"!");
         System.out.println("Enter a number: ");
         int[] result = new int[2];
-        int number = input.nextInt() -1;
+        int coordinateX = checkQuitX(input.nextLine());
+
         System.out.println("Enter a letter: ");
-        char letter = input.next().charAt(0);
-        result[0] = number;
+        char letter = checkQuitY(input.nextLine());
+
+        result[0] = coordinateX;
         result[1] = converter(letter);
-        if (!checkIfValidMove(number,converter(letter))){
-            System.out.println("This place is not empty");
+        if (!checkIfValidMove(coordinateX,converter(letter))){
+            System.out.println("This is not a valid coordinate");
             return getMove(player);
         }
         return result;
@@ -206,7 +213,7 @@ public class Game implements GameInterface {
     }
 
     public boolean checkIfValidMove(int coordinateX, int coordinateY){
-        return board[coordinateX][coordinateY] == 0;
+        return coordinateX <= board.length && coordinateY <= board[1].length && board[coordinateX][coordinateY] == 0;
     }
 
     public boolean checkDirectionDiagonal(int rowLenght, int colLenght, int player, int howMany, String direction){
@@ -242,5 +249,21 @@ public class Game implements GameInterface {
             }
         }
         return false;
+    }
+    public int checkQuitX(String input) {
+        int coordinateX;
+        try {
+            coordinateX = Integer.parseInt(input);
+            return coordinateX -1;
+        }catch (java.lang.NumberFormatException e){
+            System.exit(0);
+        }
+        return 0;
+    }
+    public char checkQuitY(String input) {
+        if(input.equals("quit")){
+            System.exit(0);
+        }
+        return input.charAt(0);
     }
 }
