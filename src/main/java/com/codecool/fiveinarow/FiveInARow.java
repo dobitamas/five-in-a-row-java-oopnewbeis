@@ -13,14 +13,30 @@ public class FiveInARow {
         System.out.println("Choose your opponent!");
         System.out.println("1 Other player");
         System.out.println("2 The mighty computer");
+        System.out.println("3 I am too afraid to play");
         int chosenOpponent = input.nextInt();
         if (chosenOpponent == 1){
-            Game game = new Game(6, 5);
-            game.play(3);
+            int [] parameters = choseSize();
+            Game game = new Game(parameters[0], parameters[1]);
+            game.play(parameters[2], false);
         } else if (chosenOpponent == 2){
-            System.out.println("The computer is not wishes to play against you, please check back later");
+            int [] parameters = choseSize();
+            Game game = new Game(parameters[0], parameters[1]);
+            game.play(parameters[2], true);
+        } else if (chosenOpponent == 3){
+            System.exit(0);
         }
 
+    }
+    public static int[] choseSize(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("How many rows you want to see?");
+        int rows = input.nextInt();
+        System.out.println("And how many columns?");
+        int cols = input.nextInt();
+        System.out.println("Now tell me, how many figures should be in line to win?");
+        int howMany = input.nextInt();
+        return new int[] {rows, cols, howMany};
     }
 
 }

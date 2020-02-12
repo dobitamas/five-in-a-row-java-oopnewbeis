@@ -158,10 +158,13 @@ public class Game implements GameInterface {
     public void enableAi(int player) {
     }
 
-    public void play(int howMany) {
+    public void play(int howMany, boolean AI) {
         printBoard();
-        boolean AI = true;
-        handleTurn(howMany,AI);
+        if(AI){
+            handleTurn(howMany,AI);
+        } else {
+            handleTurn(howMany, false);
+        }
     }
 
     public int converter(char letter) {
