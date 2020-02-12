@@ -88,44 +88,16 @@ public class Game implements GameInterface {
     }
 
     public boolean hasWon(int player, int howMany, int coordinateX, int coordinateY) {
-        int row;
-        int col;
-        int count = 0;
         int colLenght = board[1].length;
         int rowLenght = board.length;
 
         if(checkDirections(colLenght, coordinateX, player, howMany, "Horizontal")){
             return true;
-        }
-        if(checkDirections(rowLenght, coordinateY, player, howMany, "Vertical")){
+        } else if(checkDirections(rowLenght, coordinateY, player, howMany, "Vertical")){
             return true;
-        }
-
-        for (int startOfRow = 0; startOfRow < rowLenght - howMany ; startOfRow++){
-            for (row = startOfRow, col = 0; row < rowLenght && col < colLenght; row++, col++) {
-                if(board[row][col] == player){
-                    count++;
-                }else{
-                    count = 0;
-                }
-                if (count == howMany) {
-                    return true;
-                }
-            }
-        }
-        for (int startOfCol = 1; startOfCol < colLenght - howMany ; startOfCol++) {
-            for ( col = startOfCol, row = 0; col < colLenght && row < rowLenght ; row++, col++) {
-                if(board[row][col] == player){
-                    count++;
-                }else{
-                    count = 0;
-                }
-                if(count == howMany){
-                    return true;
-                }
-            }
-        }
-        return false;
+        } else if(checkDirectionDiagonal(rowLenght, colLenght, player, howMany, "DiagonalCol")){
+            return true;
+        } else return checkDirectionDiagonal(rowLenght, colLenght, player, howMany, "DiagonalRow");
     }
 
     public boolean isFull() {
@@ -205,6 +177,41 @@ public class Game implements GameInterface {
                 }
                 if (countVertical == howMany) {
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkDirectionDiagonal(int rowLenght, int colLenght, int player, int howMany, String direction){
+        int col;
+        int row;
+        if (direction.equals("DiagonalCol")){
+            int diagonalColCount = 0;
+            for (int startOfRow = 0; startOfRow < rowLenght - howMany ; startOfRow++){
+                for (row = startOfRow, col = 0; row < rowLenght && col < colLenght; row++, col++) {
+                    if(board[row][col] == player){
+                        diagonalColCount++;
+                    }else{
+                        diagonalColCount = 0;
+                    }
+                    if (diagonalColCount == howMany) {
+                        return true;
+                    }
+                }
+            }
+        } else if (direction.equals("DiagonalRow")){
+            int diagonalRowCount = 0;
+            for (int startOfCol = 1; startOfCol < colLenght - howMany ; startOfCol++) {
+                for ( col = startOfCol, row = 0; col < colLenght && row < rowLenght ; row++, col++) {
+                    if(board[row][col] == player){
+                        diagonalRowCount++;
+                    }else{
+                        diagonalRowCount = 0;
+                    }
+                    if(diagonalRowCount == howMany){
+                        return true;
+                    }
                 }
             }
         }
