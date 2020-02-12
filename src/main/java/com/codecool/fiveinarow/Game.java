@@ -40,11 +40,12 @@ public class Game implements GameInterface {
                 turn = false;
             } else {
                 if (AI) {
-                    int coordinateX = 3;
-                    int coordinateY = 2;
-                    mark(player2,coordinateX,coordinateY);
+                    double coordinateX = (Math.random()*(board.length - 1));
+                    double coordinateY = (Math.random()*(board.length - 1));
+                    checkIfValidMove((int) coordinateX,(int) coordinateY);
+                    mark(player2,(int)coordinateX,(int) coordinateY);
                     printBoard();
-                    if (hasWon(player2, howMany, coordinateX, coordinateY)) {
+                    if (hasWon(player2, howMany, (int) coordinateX,(int) coordinateY)) {
                         printResult(player2);
                         break;
                     }
@@ -63,7 +64,9 @@ public class Game implements GameInterface {
                 turn = true;
             }
         }
-        System.out.println("The board is full bruh!!");
+        if (isFull()){
+            System.out.println("The board is full bruh!!");
+        }
     }
 
     public int[] getMove(int player) {
