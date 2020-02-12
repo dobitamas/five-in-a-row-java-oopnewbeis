@@ -28,7 +28,7 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public void handleTurn(int howMany){
+    public void handleTurn(int howMany,boolean AI){
         int player1 = 1;
         int player2 = 2;
         boolean turn = true;
@@ -46,34 +46,46 @@ public class Game implements GameInterface {
                 }
                 turn = false;
             } else {
-                System.out.print("\033[H\033[2J");
-                int [] coordinates = getMove(player2);
-                int coordinateX = coordinates[0];
-                int coordinateY = coordinates[1];
-                mark(player2, coordinateX, coordinateY);
-                printBoard();
-                if (hasWon(player2, howMany, coordinateX, coordinateY)){
-                    printResult(player2);
-                    break;
+                if (AI) {
+                    int coordinateX = 3;
+                    int coordinateY = 2;
+                    mark(player2,coordinateX,coordinateY);
+                    printBoard();
+                    if (hasWon(player2, howMany, coordinateX, coordinateY)) {
+                        printResult(player2);
+                        break;
+                    }
+                }else {
+                    System.out.print("\033[H\033[2J");
+                    int[] coordinates = getMove(player2);
+                    int coordinateX = coordinates[0];
+                    int coordinateY = coordinates[1];
+                    mark(player2, coordinateX, coordinateY);
+                    printBoard();
+                    if (hasWon(player2, howMany, coordinateX, coordinateY)) {
+                        printResult(player2);
+                        break;
+                    }
                 }
                 turn = true;
             }
         }
+        System.out.println("The board is full bruh!!");
     }
 
     public int[] getMove(int player) {
         Scanner input =new Scanner(System.in);
         System.out.println("Take your move, " +player +"!");
         System.out.println("Enter a number: ");
-        int[] result = new int[3];
+        int[] result = new int[2];
         int number = input.nextInt() -1;
         System.out.println("Enter a letter: ");
         char letter = input.next().charAt(0);
         result[0] = number;
         result[1] = converter(letter);
-        if (!checkIfValidMove(result[0],result[1])){
+        if (!checkIfValidMove(number,converter(letter))){
             System.out.println("This place is not empty");
-            getMove(player);
+            return getMove(player);
         }
         return result;
     }
@@ -105,8 +117,14 @@ public class Game implements GameInterface {
     }
 
     public boolean isFull() {
-
-        return false;
+        for (int[] i: board){
+            for (int j:i){
+                if (j == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void printBoard() {
@@ -149,7 +167,8 @@ public class Game implements GameInterface {
 
     public void play(int howMany) {
         printBoard();
-        handleTurn(howMany);
+        boolean AI = true;
+        handleTurn(howMany,AI);
     }
 
     public int converter(char letter) {
