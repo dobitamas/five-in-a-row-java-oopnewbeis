@@ -171,7 +171,7 @@ public class Game implements GameInterface {
     public void play(int howMany, boolean AI) {
         printBoard();
         if(AI){
-            handleTurn(howMany,AI);
+            handleTurn(howMany,true);
         } else {
             handleTurn(howMany, false);
         }
