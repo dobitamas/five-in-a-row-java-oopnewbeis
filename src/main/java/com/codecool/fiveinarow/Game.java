@@ -10,13 +10,6 @@ public class Game implements GameInterface {
 
     public Game(int nRows, int nCols) {
         board = new int[nRows][nCols];
-//        The board below is a dummy list for testing
-//        Good to know: 1 = O; 2 = X;
-//        board = new int[][]{
-//                {0,1,0},
-//                {2,0,1},
-//                {0,0,0},
-//        };
     }
 
     public int[][] getBoard() {
@@ -65,7 +58,7 @@ public class Game implements GameInterface {
         Scanner input =new Scanner(System.in);
         System.out.println("Take your move, " +player +"!");
         System.out.println("Enter a number: ");
-        int[] result = new int[3];
+        int[] result = new int[2];
         int number = input.nextInt() -1;
         System.out.println("Enter a letter: ");
         char letter = input.next().charAt(0);
@@ -73,7 +66,8 @@ public class Game implements GameInterface {
         result[1] = converter(letter);
         if (!checkIfValidMove(result[0],result[1])){
             System.out.println("This place is not empty");
-            getMove(player);
+            return getMove(player);
+
         }
         return result;
     }
