@@ -20,6 +20,7 @@ public class FiveInARow {
         } else if (chosenOpponent == 2){
             System.out.println("The computer is not wishes to play against you, please check back later");
         }
+
     }
 
 }
