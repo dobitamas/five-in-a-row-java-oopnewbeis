@@ -71,6 +71,10 @@ public class Game implements GameInterface {
         char letter = input.next().charAt(0);
         result[0] = number;
         result[1] = converter(letter);
+        if (!checkIfValidMove(result[0],result[1])){
+            System.out.println("This place is not empty");
+            getMove(player);
+        }
         return result;
     }
 
@@ -209,5 +213,9 @@ public class Game implements GameInterface {
             }
         }
         return false;
+    }
+
+    public boolean checkIfValidMove(int coordinateX, int coordinateY){
+        return board[coordinateX][coordinateY] == 0;
     }
 }
