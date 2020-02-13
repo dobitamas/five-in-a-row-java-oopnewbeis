@@ -49,8 +49,8 @@ public class Game implements GameInterface {
                     int X = AIMove[0];
                     int Y = AIMove[1];
                     mark(player2,X,Y);
-                    System.out.print("\033[H\033[2J");//In ubuntu terminal works!!
                     Thread.sleep(2000);
+                    System.out.print("\033[H\033[2J");//In ubuntu terminal works!!
                     printBoard();
                     if (hasWon(player2, howMany, X, Y)) {
                         printResult(player2);
@@ -86,9 +86,17 @@ public class Game implements GameInterface {
         System.out.println("Enter a number: ");
         int[] result = new int[2];
         int coordinateX = checkQuitX(input.nextLine());
+        if (coordinateX == -1){
+            System.out.println("This is not a valid input");
+            return getMove(player);
+        }
 
         System.out.println("Enter a letter: ");
         char letter = checkQuitY(input.nextLine());
+        if (letter == 0){
+            System.out.println("This is not a valid input");
+            return getMove(player);
+        }
 
         result[0] = coordinateX;
         result[1] = converter(letter);
@@ -262,17 +270,27 @@ public class Game implements GameInterface {
         try {
             coordinateX = Integer.parseInt(input);
             return coordinateX -1;
-        }catch (java.lang.NumberFormatException e){
-            System.exit(0);
+        }catch (NumberFormatException e) {
+            if (input.equals("quit")) {
+                System.exit(0);
+            }else {
+                return -1;
+            }
         }
         return 0;
     }
 
     public char checkQuitY(String input) {
-        if(input.equals("quit")){
-            System.exit(0);
+        try {
+            Integer.parseInt(input);
+        }catch (NumberFormatException e) {
+            if (input.equals("quit")) {
+                System.exit(0);
+            } else {
+                return input.charAt(0);
+            }
         }
-        return input.charAt(0);
+        return 0;
     }
 
     public int[] CalculateAIMoves(int coordinateX, int coordinateY) {
@@ -346,10 +364,8 @@ public class Game implements GameInterface {
                         return new int[]{coordinateX + 1, coordinateY};
                     }
                 }
-                if (coordinateX - 3 >= 0) {
-                    if (board[coordinateX - 3][coordinateY] == 0) {
-                        return new int[]{coordinateX - 3, coordinateY};
-                    }
+                if (board[coordinateX - 3][coordinateY] == 0) {
+                    return new int[]{coordinateX - 3, coordinateY};
                 }
             }
             if (coordinateX < allRows -2 && coordinateX > 1 && board[coordinateX-1][coordinateY] == enemyMove && board[coordinateX+1][coordinateY] == enemyMove){

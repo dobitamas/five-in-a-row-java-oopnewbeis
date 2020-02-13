@@ -32,8 +32,16 @@ public class FiveInARow {
         Scanner input = new Scanner(System.in);
         System.out.println("How many rows you want to see?");
         int rows = input.nextInt();
+        if (rows < 5){
+            System.out.println("Rows must be at least 5");
+            return choseSize();
+        }
         System.out.println("And how many columns?");
         int cols = input.nextInt();
+        if (cols < 5){
+            System.out.println("Rows must be at least 5");
+            return choseSize();
+        }
         int howMany = 5;
         return new int[] {rows, cols, howMany};
     }
