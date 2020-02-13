@@ -289,7 +289,7 @@ public class Game implements GameInterface {
             }
             if (coordinateY < allCols - 2 && coordinateY > 1 && board[coordinateX][coordinateY - 1] == enemyMove && board[coordinateX][coordinateY + 1] == enemyMove) {
                 if (board[coordinateX][coordinateY - 2] == 0) {
-                    return new int[]{coordinateX, coordinateY + 2};
+                    return new int[]{coordinateX, coordinateY - 2};
                 }
                 if (board[coordinateX][coordinateY + 2] == 0) {
                     return new int[]{coordinateX, coordinateY + 2};
