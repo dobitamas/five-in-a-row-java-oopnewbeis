@@ -14,5 +14,5 @@ public interface GameInterface {
     void printBoard();
     void printResult(int player);
     void enableAi(int player);
-    void play(int howMany, boolean AI);
+    void play(int howMany, boolean AI) throws InterruptedException;
 }

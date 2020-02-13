@@ -2,7 +2,7 @@ package com.codecool.fiveinarow;
 import java.util.Scanner;
 public class FiveInARow {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner input = new Scanner(System.in);
         System.out.println("   ______                      __        ");
         System.out.println("  / ____/___  ____ ___  ____  / /____  __");
