@@ -22,7 +22,7 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public void handleTurn(int howMany,boolean AI){
+    public void handleTurn(int howMany,boolean AI) throws InterruptedException {
         int player1 = 1;
         int player2 = 2;
         int[] AIMove = new int[2];
@@ -41,12 +41,16 @@ public class Game implements GameInterface {
                     break;
                 }
                 turn = false;
+
+
             } else {
                 if (AI) {
+                    System.out.println("The computer is thinking...");
                     int X = AIMove[0];
                     int Y = AIMove[1];
                     mark(player2,X,Y);
-                    System.out.print("\033[H\033[2J"); //In ubuntu terminal works!!
+                    System.out.print("\033[H\033[2J");//In ubuntu terminal works!!
+                    Thread.sleep(2000);
                     printBoard();
                     if (hasWon(player2, howMany, X, Y)) {
                         printResult(player2);
@@ -74,7 +78,11 @@ public class Game implements GameInterface {
 
     public int[] getMove(int player) {
         Scanner input =new Scanner(System.in);
-        System.out.println("Take your move, " +player +"!");
+        if (player == 1){
+            System.out.println("Take your move, O!");
+        } else if (player == 2) {
+            System.out.println("Take your move, X!");
+        }
         System.out.println("Enter a number: ");
         int[] result = new int[2];
         int coordinateX = checkQuitX(input.nextLine());
@@ -167,7 +175,7 @@ public class Game implements GameInterface {
     public void enableAi(int player) {
     }
 
-    public void play(int howMany, boolean AI) {
+    public void play(int howMany, boolean AI) throws InterruptedException {
         printBoard();
         if(AI){
             handleTurn(howMany,true);
@@ -272,13 +280,9 @@ public class Game implements GameInterface {
         int allCols = board[1].length;
         int enemyMove = board[coordinateX][coordinateY];
         int[] enemyCoordinates = {coordinateX,coordinateY};
-        System.out.println("ezoké");
         int [] horizontalResult = horizontalAI(coordinateX,coordinateY,allCols,enemyMove);
-        System.out.println("ezis");
         int[] verticalResult = verticalAI(coordinateX,coordinateY,enemyMove,allRows);
-        System.out.println("ezissss");
         int [] diagonalResult = diagonalAI(coordinateX,coordinateY,enemyMove,allCols,allRows);
-        System.out.println("itt???");
         if (horizontalResult[0] != enemyCoordinates[0] || horizontalResult[1] != enemyCoordinates[1]){
             return new int[] {horizontalResult[0],horizontalResult[1]};
         }
