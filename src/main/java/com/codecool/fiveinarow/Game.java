@@ -32,8 +32,8 @@ public class Game implements GameInterface {
                 int [] coordinates = getMove(player1);
                 int coordinateX = coordinates[0];
                 int coordinateY = coordinates[1];
-                AIMove = CalculateAIMoves(coordinateX,coordinateY);
                 mark(player1, coordinateX, coordinateY);
+                AIMove = CalculateAIMoves(coordinateX,coordinateY);
                 printBoard();
                 if (hasWon(player1, howMany, coordinateX, coordinateY)){
                     printResult(player1);
@@ -278,37 +278,49 @@ public class Game implements GameInterface {
         int enemyMove = board[coordinateX][coordinateY];
         if (coordinateY >= 0 && coordinateY < allCols) {
             if (coordinateY > 2 && board[coordinateX][coordinateY - 2] == enemyMove && board[coordinateX][coordinateY - 1] == enemyMove) {
-                if (board[coordinateX][coordinateY + 1] == 0) {
-                    return new int[]{coordinateX, coordinateY + 1};
+                if (coordinateY + 1 < allCols) {
+                    if (board[coordinateX][coordinateY + 1] == 0) {
+                        return new int[]{coordinateX, coordinateY + 1};
+                    }
                 }
-                if (board[coordinateX][coordinateY - 3] == 0) {
-                    return new int[]{coordinateX, coordinateY - 3};
+                if (coordinateY - 3 >= 0) {
+                    if (board[coordinateX][coordinateY - 3] == 0) {
+                        return new int[]{coordinateX, coordinateY - 3};
+                    }
                 }
             }
             if (coordinateY < allCols - 2 && coordinateY > 1 && board[coordinateX][coordinateY - 1] == enemyMove && board[coordinateX][coordinateY + 1] == enemyMove) {
                 if (board[coordinateX][coordinateY - 2] == 0) {
-                    return new int[]{coordinateX, coordinateY + 2};
+                    return new int[]{coordinateX, coordinateY - 2};
                 }
                 if (board[coordinateX][coordinateY + 2] == 0) {
                     return new int[]{coordinateX, coordinateY + 2};
                 }
             }
             if (coordinateY < allCols-3 && board[coordinateX][coordinateY+1] == enemyMove && board[coordinateX][coordinateY+2] == enemyMove){
-                if (board[coordinateX][coordinateY+3] == 0){
-                    return new int[]{coordinateX, coordinateY+3};
+                if (coordinateY + 3 < allCols ) {
+                    if (board[coordinateX][coordinateY + 3] == 0) {
+                        return new int[]{coordinateX, coordinateY + 3};
+                    }
                 }
-                if (board[coordinateX][coordinateY-1] == 0){
-                    return new int[]{coordinateX, coordinateY-1};
+                if (coordinateY - 1 >= 0) {
+                    if (board[coordinateX][coordinateY - 1] == 0) {
+                        return new int[]{coordinateX, coordinateY - 1};
+                    }
                 }
             }
         }
         if (coordinateX >= 0 && coordinateX < allRows){
-            if (coordinateX > 2 && board[coordinateX -2][coordinateY] == enemyMove && board[coordinateX-1][coordinateY] == enemyMove){
-                if (board[coordinateX+1][coordinateY] == 0){
-                    return new int[]{coordinateX+1, coordinateY};
+            if (coordinateX >= 2 && board[coordinateX -2][coordinateY] == enemyMove && board[coordinateX-1][coordinateY] == enemyMove){
+                if (coordinateX + 1 < allRows) {
+                    if (board[coordinateX + 1][coordinateY] == 0) {
+                        return new int[]{coordinateX + 1, coordinateY};
+                    }
                 }
-                if (board[coordinateX -3][coordinateY] == 0){
-                    return new int[]{coordinateX-3, coordinateY};
+                if (coordinateX - 3 >= 0) {
+                    if (board[coordinateX - 3][coordinateY] == 0) {
+                        return new int[]{coordinateX - 3, coordinateY};
+                    }
                 }
             }
             if (coordinateX < allRows -2 && coordinateX > 1 && board[coordinateX-1][coordinateY] == enemyMove && board[coordinateX+1][coordinateY] == enemyMove){
@@ -319,67 +331,94 @@ public class Game implements GameInterface {
                     return new int[]{coordinateX-2, coordinateY};
                 }
             }
-            if (coordinateX < allRows-3 && board[coordinateX+1][coordinateY] == enemyMove && board[coordinateX+2][coordinateY] == enemyMove){
-                if (board[coordinateX+3][coordinateY] == 0){
-                    return new int[]{coordinateX+3, coordinateY};
+            if (coordinateX <= allRows-3 && board[coordinateX+1][coordinateY] == enemyMove && board[coordinateX+2][coordinateY] == enemyMove){
+                if (coordinateX + 3 < allRows) {
+                    if (board[coordinateX + 3][coordinateY] == 0) {
+                        return new int[]{coordinateX + 3, coordinateY};
+                    }
                 }
-                if (board[coordinateX-1][coordinateY] == 0){
-                    return new int[]{coordinateX-1, coordinateY};
-                }
-            }
-        }
-        if (coordinateY >= 0 && coordinateY < allCols && coordinateX >= 0 && coordinateX < allRows){
-            if (coordinateY > 2 && coordinateX > 2 && board[coordinateX-2][coordinateY-2] == enemyMove && board[coordinateX-1][coordinateY-1] == enemyMove){
-                if (board[coordinateX+1][coordinateY+1] == 0){
-                    return new int[]{coordinateX+1, coordinateY-1};
-                }
-                if (board[coordinateX-3][coordinateY-3] == 0){
-                    return new int[]{coordinateX-3,coordinateY-3};
-                }
-            }
-            if (coordinateY < allCols-2 && coordinateY > 1 && coordinateX < allRows-2 && coordinateX > 1 && board[coordinateX-1][coordinateY-1] == enemyMove && board[coordinateX+1][coordinateY+1] == enemyMove){
-                if (board[coordinateX+2][coordinateY+2] == 0){
-                    return new int[]{coordinateX+2,coordinateY+2};
-                }
-                if (board[coordinateX-2][coordinateY-2] == 0){
-                    return new int[]{coordinateX-2, coordinateY-2};
-                }
-            }
-            if (coordinateY < allCols-3 && coordinateX < allRows-3 && board[coordinateX+1][coordinateY+1] == enemyMove && board[coordinateX+2][coordinateY+2] == enemyMove){
-                if (board[coordinateX+3][coordinateY+3] == 0){
-                    return new int[]{coordinateX+3, coordinateY+3};
-                }
-                if (board[coordinateX-1][coordinateY-1] == 0){
-                    return new int[]{coordinateX-1, coordinateY-1};
+                if (coordinateX -1 >= 0) {
+                    if (board[coordinateX - 1][coordinateY] == 0) {
+                        return new int[]{coordinateX - 1, coordinateY};
+                    }
                 }
             }
         }
-        if (coordinateY >= 0 && coordinateY < allCols && coordinateX >= 0 && coordinateX < allRows ){
-            if (coordinateY > 2 && coordinateX > 2 && board[coordinateX+2][coordinateY-2] == enemyMove && board[coordinateX+1][coordinateY-1] == enemyMove){
-                if (board[coordinateX-1][coordinateY+1] == 0){
-                    return new int[]{coordinateX-1, coordinateY+1};
+        if (coordinateY >= 0 && coordinateY < allCols && coordinateX >= 0 && coordinateX < allRows) {
+            if (coordinateY >= 2 && coordinateX >= 2 && board[coordinateX - 2][coordinateY - 2] == enemyMove && board[coordinateX - 1][coordinateY - 1] == enemyMove) {
+                if (coordinateX + 1 < allRows && coordinateY + 1 < allCols) {
+                    if (board[coordinateX + 1][coordinateY + 1] == 0) {
+                        return new int[]{coordinateX + 1, coordinateY + 1};
+                    }
                 }
-                if (board[coordinateX-3][coordinateY+3] == 0){
-                    return new int[]{coordinateX-3,coordinateY+3};
-                }
-            }
-            if (coordinateY < allCols-2 && coordinateY > 1 && coordinateX < allRows-2 && coordinateX > 1 && board[coordinateX+1][coordinateY-1] == enemyMove && board[coordinateX-1][coordinateY+1] == enemyMove){
-                if (board[coordinateX-2][coordinateY+2] == 0){
-                    return new int[]{coordinateX-2, coordinateY+2};
-                }
-                if (board[coordinateX+2][coordinateY-2] == 0){
-                    return new int[]{coordinateX+2, coordinateY-2};
+                if (coordinateX - 3 >= 0 && coordinateY - 3 >= 0) {
+                    if (board[coordinateX - 3][coordinateY - 3] == 0) {
+                        return new int[]{coordinateX - 3, coordinateY - 3};
+                    }
                 }
             }
-            if (coordinateY < allCols-3 && coordinateX < allRows-3 && coordinateX > 2 && board[coordinateX-1][coordinateY+1] == enemyMove && board[coordinateX-2][coordinateY+2] == enemyMove){
-                if (board[coordinateX-3][coordinateY+3] == 0){
-                    return new int[]{coordinateX-3, coordinateY+3};
+            if (coordinateY < allCols - 2 && coordinateY > 1 && coordinateX < allRows - 2 && coordinateX > 1 && board[coordinateX - 1][coordinateY - 1] == enemyMove && board[coordinateX + 1][coordinateY + 1] == enemyMove) {
+                if (board[coordinateX + 2][coordinateY + 2] == 0) {
+                    return new int[]{coordinateX + 2, coordinateY + 2};
                 }
-                if (board[coordinateX+1][coordinateY-1] == 0){
-                    return new int[]{coordinateX+1, coordinateY-1};
+                if (board[coordinateX - 2][coordinateY - 2] == 0) {
+                    return new int[]{coordinateX - 2, coordinateY - 2};
+                }
+            }
+            if (coordinateY <= allCols - 3 && coordinateX <= allRows - 3 && board[coordinateX + 1][coordinateY + 1] == enemyMove && board[coordinateX + 2][coordinateY + 2] == enemyMove) {
+                if (coordinateX + 3 < allRows && coordinateY + 3 < allCols) {
+                    if (board[coordinateX + 3][coordinateY + 3] == 0) {
+                        return new int[]{coordinateX + 3, coordinateY + 3};
+                    }
+                }
+                if (coordinateX -1 >= 0 && coordinateY - 1 >= 0) {
+                    if (board[coordinateX - 1][coordinateY - 1] == 0) {
+                        return new int[]{coordinateX - 1, coordinateY - 1};
+                    }
+                }
+            }
+
+
+
+            if (coordinateY >= 2 && coordinateX >= 2 && board[coordinateX + 2][coordinateY - 2] == enemyMove && board[coordinateX + 1][coordinateY - 1] == enemyMove) {
+                if (coordinateX - 1 >= 0 && coordinateY + 1 <allCols) {
+                    if (board[coordinateX - 1][coordinateY + 1] == 0) {
+                        return new int[]{coordinateX - 1, coordinateY + 1};
+                    }
+                }
+                if (coordinateX - 3 >= 0 && coordinateY + 3 <allCols) {
+                    if (board[coordinateX - 3][coordinateY + 3] == 0) {
+                        return new int[]{coordinateX - 3, coordinateY + 3};
+                    }
+                }
+            }
+            if (coordinateY < allCols - 2 && coordinateY > 1 && coordinateX < allRows - 2 && coordinateX > 1 && board[coordinateX + 1][coordinateY - 1] == enemyMove && board[coordinateX - 1][coordinateY + 1] == enemyMove) {
+                if (board[coordinateX - 2][coordinateY + 2] == 0) {
+                    return new int[]{coordinateX - 2, coordinateY + 2};
+                }
+                if (board[coordinateX + 2][coordinateY - 2] == 0) {
+                    return new int[]{coordinateX + 2, coordinateY - 2};
+                }
+            }
+            if (coordinateY <= allCols - 3 && coordinateX <= allRows - 3 && coordinateX > 2 && board[coordinateX - 1][coordinateY + 1] == enemyMove && board[coordinateX - 2][coordinateY + 2] == enemyMove) {
+                if (coordinateX - 3 >= 0 && coordinateY + 3 < allCols) {
+                    if (board[coordinateX - 3][coordinateY + 3] == 0) {
+                        return new int[]{coordinateX - 3, coordinateY + 3};
+                    }
+                }
+                if (coordinateX + 1 < allRows && coordinateY -1 >= 0) {
+                    if (board[coordinateX + 1][coordinateY - 1] == 0) {
+                        return new int[]{coordinateX + 1, coordinateY - 1};
+                    }
                 }
             }
         }
-        return new int[] {-1,-1};
+        double coordinateXX = (Math.random() * (board.length - 1));
+        double coordinateYY = (Math.random() * (board.length - 1));
+        while (!checkIfValidMove((int)coordinateXX,(int)coordinateYY)) {
+            coordinateXX = (Math.random() * (board.length - 1));
+            coordinateYY = (Math.random() * (board.length - 1));
+        }
+        return new int[] {(int)coordinateXX,(int) coordinateYY};
     }
 }
