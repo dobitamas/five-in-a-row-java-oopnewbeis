@@ -34,8 +34,7 @@ public class FiveInARow {
         int rows = input.nextInt();
         System.out.println("And how many columns?");
         int cols = input.nextInt();
-        System.out.println("Now tell me, how many figures should be in line to win?");
-        int howMany = input.nextInt();
+        int howMany = 5;
         return new int[] {rows, cols, howMany};
     }
 
