@@ -38,6 +38,8 @@ public class Game implements GameInterface {
                     break;
                 }
                 turn = false;
+
+
             } else {
                 if (AI) {
                     double coordinateX = (Math.random() * (board.length - 1));
