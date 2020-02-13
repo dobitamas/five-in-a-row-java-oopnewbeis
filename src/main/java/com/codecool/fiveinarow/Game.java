@@ -24,6 +24,7 @@ public class Game implements GameInterface {
     public void handleTurn(int howMany,boolean AI){
         int player1 = 1;
         int player2 = 2;
+        int[] AIMove = new int[2];
         boolean turn = true;
         while (!isFull()){
             if (turn) {
@@ -31,6 +32,7 @@ public class Game implements GameInterface {
                 int [] coordinates = getMove(player1);
                 int coordinateX = coordinates[0];
                 int coordinateY = coordinates[1];
+                AIMove = CalculateAIMoves(coordinateX,coordinateY);
                 mark(player1, coordinateX, coordinateY);
                 printBoard();
                 if (hasWon(player1, howMany, coordinateX, coordinateY)){
@@ -42,14 +44,16 @@ public class Game implements GameInterface {
 
             } else {
                 if (AI) {
-                    double coordinateX = (Math.random() * (board.length - 1));
-                    double coordinateY = (Math.random() * (board.length - 1));
-                    while (!checkIfValidMove((int)coordinateX,(int)coordinateY)) {
-                        coordinateX = (Math.random() * (board.length - 1));
-                        coordinateY = (Math.random() * (board.length - 1));
-                    }
-                    int X = (int)coordinateX;
-                    int Y = (int)coordinateY;
+//                    double coordinateX = (Math.random() * (board.length - 1));
+//                    double coordinateY = (Math.random() * (board.length - 1));
+//                    while (!checkIfValidMove((int)coordinateX,(int)coordinateY)) {
+//                        coordinateX = (Math.random() * (board.length - 1));
+//                        coordinateY = (Math.random() * (board.length - 1));
+//                    }
+//                    int X = (int)coordinateX;
+//                    int Y = (int)coordinateY;
+                    int X = AIMove[0];
+                    int Y = AIMove[1];
                     mark(player2,X,Y);
                     printBoard();
                     if (hasWon(player2, howMany, X, Y)) {
