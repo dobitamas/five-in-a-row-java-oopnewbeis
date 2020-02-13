@@ -1,6 +1,7 @@
 package com.codecool.fiveinarow;
 
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -136,6 +137,7 @@ public class Game implements GameInterface {
         }
         System.out.println();
         for (int i =0; i < board.length; i++){
+            System.out.println();
             System.out.print(i+1 + "\t");
             for (int j = 0; j < board[i].length; j++){
                 switch (board[i][j]){
