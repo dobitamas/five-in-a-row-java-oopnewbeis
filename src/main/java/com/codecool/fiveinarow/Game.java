@@ -1,10 +1,12 @@
 package com.codecool.fiveinarow;
+import java.util.Scanner;
 
 public class Game implements GameInterface {
 
     private int[][] board;
 
     public Game(int nRows, int nCols) {
+        board = new int[nRows][nCols];
     }
 
     public int[][] getBoard() {
@@ -16,6 +18,10 @@ public class Game implements GameInterface {
     }
 
     public int[] getMove(int player) {
+	Scanner scanner = new Scanner(System.in);
+	System.out.println("Enter coordinates");
+	String coordinates = scanner.nextLine();
+	System.out.println(coordinates);
         return null;
     }
 
