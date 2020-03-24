@@ -10,6 +10,8 @@ public class FiveInARow {
         game.play(5);
         int[] coord = game.getMove(1);
 	game.mark(1, coord[0], coord[1]);
+	int[] coords = game.getMove(2);
+	game.mark(2, coords[0], coords[1]);
     }
 
 }
