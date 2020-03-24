@@ -52,7 +52,47 @@ public class Game implements GameInterface {
 
     public boolean hasWon(int player, int howMany) {
         System.out.println(Arrays.toString(latestMove));
+	System.out.println("Sorba nyert: " + hasWonRow(howMany));
+	System.out.println("Oszlopba nyert: " + hasWonCol(howMany));
 	return false;
+    }
+
+    public boolean hasWonRow(int howMany) {
+	int count = 1;
+	for (int i = latestMove[1] + 1; i < board[latestMove[0]].length; i++){
+	    if (board[latestMove[0]][latestMove[1]] == board[latestMove[0]][i]){
+		count++;
+	    } else {
+		break;
+	    }
+	}
+	for (int i = latestMove[1] - 1; i >= 0; i--){
+	    if (board[latestMove[0]][latestMove[1]] == board[latestMove[0]][i]){
+		count++;
+	    } else {
+		break;
+	    }
+	}
+	return (count >= howMany);
+    }
+
+    public boolean hasWonCol(int howMany) {
+	int count = 1;
+	for (int i = latestMove[0] + 1; i < board.length; i++){
+	    if (board[latestMove[0]][latestMove[1]] == board[i][latestMove[1]]){
+		count++;
+	    } else {
+		break;
+	    }
+	}
+	for (int i = latestMove[0] - 1; i >= 0; i--){
+	    if (board[latestMove[0]][latestMove[1]] == board[i][latestMove[1]]){
+		count++;
+	    } else {
+		break;
+	    }
+	}
+	return (count >= howMany);
     }
 
     public boolean isFull() {
@@ -97,8 +137,8 @@ public class Game implements GameInterface {
     }
 
     public void play(int howMany) {
+	printBoard();
 	while(true){
-		printBoard();
 		int[] coord = getMove(1);
 		mark(1, coord[0], coord[1]);
 		printBoard();
