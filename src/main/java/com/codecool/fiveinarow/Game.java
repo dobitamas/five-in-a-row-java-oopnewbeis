@@ -34,12 +34,13 @@ public class Game implements GameInterface {
 		coord[0] = alphabet.indexOf(col);
 		coord[1] = row - 1;
 		coordExist = isCoordExist(coord);
-		coordEmpty = isCoordTaken(coord);
-	
+		if(coordExist == true){
+			coordEmpty = isCoordTaken(coord);
+		}
 	}
 	
 	
-	System.out.println(Arrays.toString(coord));
+	
 	return coord;
     }
 
@@ -48,7 +49,8 @@ public class Game implements GameInterface {
     }
 
     public void mark(int player, int row, int col) {
-	
+	board[row][col] = player;
+	System.out.println(Arrays.deepToString(board));
     }
 
     public boolean hasWon(int player, int howMany) {
@@ -80,7 +82,7 @@ public class Game implements GameInterface {
 	}	
     }
     public boolean isCoordTaken(int [] coord){
-    	return (board[coord[0]][coord[1]] != 0);
+    	return (board[coord[0]][coord[1]] == 0);
     }
 	
 
