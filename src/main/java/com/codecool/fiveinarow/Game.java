@@ -84,7 +84,16 @@ public class Game implements GameInterface {
             }
         }
     }
+    public aiRandomMove(){
+        int rows = board.length - 1;
+        int cols = board[0].length - 1;
+        Random rand = new Random();
+        do{
+            int [] coordToMark = {new Random().nextInt(rows), new Random().nextInt(cols)} 
+        } while(isCoordinateTaken(coordToMark))
+        mark(2, coordToMark[0], coordToMark[1]);
 
+    }
     public boolean hasWonRow(int howMany) {
         int count = 1;
         for (int i = latestMove[1] + 1; i < board[latestMove[0]].length; i++) {
@@ -233,6 +242,7 @@ public class Game implements GameInterface {
             if (hasWon(1, howMany)) {
                 break;
             }
+            aiRandomMove();
             System.out.println("O's turn!");
             int[] coords = getMove(2);
             mark(2, coords[0], coords[1]);
