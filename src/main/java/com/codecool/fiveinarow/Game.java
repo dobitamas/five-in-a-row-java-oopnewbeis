@@ -26,7 +26,7 @@ public class Game implements GameInterface {
         int[] coordinate = new int[2];
         while (!coordinateExist || !coordinateEmpty) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter coordinates");
+            System.out.println("Enter coordinates:");
             String coordinates = scanner.nextLine();
             String col = coordinates.substring(0, 1).toLowerCase();
             try {
@@ -77,7 +77,7 @@ public class Game implements GameInterface {
                 FiveInARow.main(null);
             } else if (answer.toUpperCase().equals("N")) {
                 System.out.println("See you later!");
-		System.exit(0);
+                System.exit(0);
                 return true;
             } else {
                 System.out.println("\nPlease answer in format : (Y/N)");
@@ -226,16 +226,18 @@ public class Game implements GameInterface {
     public void play(int howMany) {
         printBoard();
         while (!isFull()) {
+            System.out.println("X's turn!");
             int[] coordinate = getMove(1);
             mark(1, coordinate[0], coordinate[1]);
             printBoard();
-            if (hasWon(1, 5)) {
+            if (hasWon(1, howMany)) {
                 break;
             }
+            System.out.println("O's turn!");
             int[] coords = getMove(2);
             mark(2, coords[0], coords[1]);
             printBoard();
-            if (hasWon(2, 5)) {
+            if (hasWon(2, howMany)) {
                 break;
             }
         }
@@ -244,7 +246,7 @@ public class Game implements GameInterface {
     }
 
     public boolean isCoordinateExists(int[] coordinate) {
-		return board.length >= coordinate[0] && board[0].length >= coordinate[1];
+        return board.length >= coordinate[0] && board[0].length >= coordinate[1];
     }
 
     public boolean isCoordinateTaken(int[] coordinate) {
