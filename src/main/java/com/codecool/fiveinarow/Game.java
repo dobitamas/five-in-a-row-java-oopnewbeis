@@ -55,6 +55,7 @@ public class Game implements GameInterface {
 	System.out.println("Sorba nyert: " + hasWonRow(howMany));
 	System.out.println("Oszlopba nyert: " + hasWonCol(howMany));
 	System.out.println("Pozitív keresztbe nyert: " + hasWonCrossPos(howMany));
+	System.out.println("Negatív keresztbe nyert: " + hasWonCrossNeg(howMany));
 	return false;
     }
 
@@ -126,24 +127,24 @@ public class Game implements GameInterface {
 
     public boolean hasWonCrossNeg(int howMany) {
 	int count = 1;
-	int j = latestMove[1] + 1;
-	for (int i = latestMove[0] + 1; i < board.length; i++){
-	    if (j >= board[i].length){
+	int j = latestMove[0] - 1;
+	for (int i = latestMove[1] + 1; i < board[0].length; i++){
+	    if (j < 0){
 		    break;
 	    } else if (board[latestMove[0]][latestMove[1]] == board[i][j]){
 		count++;
-		j++;
+		j--;
 	    } else {
 		break;
 	    }
 	}
-	j = latestMove[1] - 1;
-	for (int i = latestMove[0] - 1; i >= 0; i--){
-	    if (j < 0){
+	j = latestMove[0] + 1;
+	for (int i = latestMove[1] - 1; i >= 0; i--){
+	    if (j <= board[i].length){
 		break;
 	    } else if (board[latestMove[0]][latestMove[1]] == board[i][j]){
 		count++;
-		j--;
+		j++;
 	    } else {
 		break;
 	    }
