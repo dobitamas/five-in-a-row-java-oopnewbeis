@@ -29,13 +29,23 @@ public class Game implements GameInterface {
 		System.out.println("Enter coordinates");
 		String coordinates = scanner.nextLine();
         	String col = coordinates.substring(0,1).toLowerCase();
-		int row = Integer.parseInt(coordinates.substring(1));
-		coord[0] = alphabet.indexOf(col);
-		coord[1] = row - 1;
-		coordExist = isCoordExist(coord);
-		if(coordExist == true){
+		try{
+		    int row = Integer.parseInt(coordinates.substring(1));
+		    coord[0] = alphabet.indexOf(col);
+		    coord[1] = row - 1;
+		    coordExist = isCoordExist(coord);
+		    if(coordExist == true){
 			coordEmpty = isCoordTaken(coord);
+		    }
 		}
+		catch (NumberFormatException e){
+		    if (coordinates.equals("quit")){
+			System.out.println("See you later!");
+			System.exit(0);
+		    }
+		    System.out.println("Please enter valid coordinates!");
+		}
+		
 	}
 	latestMove[0] = coord[0];
 	latestMove[1] = coord[1];
@@ -51,11 +61,10 @@ public class Game implements GameInterface {
     }
 
     public boolean hasWon(int player, int howMany) {
-        System.out.println(Arrays.toString(latestMove));
-	System.out.println("Sorba nyert: " + hasWonRow(howMany));
-	System.out.println("Oszlopba nyert: " + hasWonCol(howMany));
-	System.out.println("Pozitív keresztbe nyert: " + hasWonCrossPos(howMany));
-	System.out.println("Negatív keresztbe nyert: " + hasWonCrossNeg(howMany));
+        if (hasWonRow(howMany) || hasWonCol(howMany) || hasWonCrossPos(howMany) || hasWonCrossNeg(howMany)){
+	    printResult(player);
+	    return true;
+	}
 	return false;
     }
 
@@ -165,7 +174,8 @@ public class Game implements GameInterface {
         return true;
     }
 
-    public void printBoard() {
+    public void printBoard(){
+	System.out.print("\033[H\033[2J");   
 	System.out.print("  ");
 	for (int i = 1; i < board[0].length; i++){
 	    System.out.print(i + " ");
@@ -190,6 +200,8 @@ public class Game implements GameInterface {
     }
 
     public void printResult(int player) {
+	String winner = (player == 1) ? "X" : "O";
+	System.out.print(winner + " won!");
     }
 
     public void enableAi(int player) {
@@ -198,7 +210,7 @@ public class Game implements GameInterface {
     public void play(int howMany) {
 	printBoard();
 	while(true){
-		int[] coord = getMove(1);
+	 	int[] coord = getMove(1);
 		mark(1, coord[0], coord[1]);
 		printBoard();
 		if (hasWon(1, 5)){
