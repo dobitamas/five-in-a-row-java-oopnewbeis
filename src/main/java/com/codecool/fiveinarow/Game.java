@@ -2,6 +2,10 @@ package com.codecool.fiveinarow;
 
 import java.util.Scanner;
 
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.*;
+
+
 public class Game implements GameInterface {
 
     private int[][] board;
@@ -84,13 +88,18 @@ public class Game implements GameInterface {
             }
         }
     }
-    public aiRandomMove(){
+    public void aiRandomMove(){
+        System.out.println("Hello Dave!");
         int rows = board.length - 1;
         int cols = board[0].length - 1;
-        Random rand = new Random();
-        do{
-            int [] coordToMark = {new Random().nextInt(rows), new Random().nextInt(cols)} 
-        } while(isCoordinateTaken(coordToMark))
+        int [] coordToMark = new int[2];
+        coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows - 1);
+        coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols - 1);
+        while(!isCoordinateTaken(coordToMark)){
+            coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows - 1);
+            coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols - 1); 
+        }
+        System.out.println(Arrays.toString(coordToMark));
         mark(2, coordToMark[0], coordToMark[1]);
 
     }
@@ -242,7 +251,7 @@ public class Game implements GameInterface {
             if (hasWon(1, howMany)) {
                 break;
             }
-            aiRandomMove();
+            
             System.out.println("O's turn!");
             int[] coords = getMove(2);
             mark(2, coords[0], coords[1]);
@@ -262,5 +271,9 @@ public class Game implements GameInterface {
     public boolean isCoordinateTaken(int[] coordinate) {
         return (board[coordinate[0]][coordinate[1]] == 0);
     }
+
+    
+
+
 
 }
