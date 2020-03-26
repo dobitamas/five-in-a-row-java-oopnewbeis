@@ -7,13 +7,15 @@ import java.util.*;
 
 
 public class Game implements GameInterface {
-
+    private int gameMode; // 1 -> player vs. player, 2-> player vs. "AI"
     private int[][] board;
     private int[] latestMove = new int[2];
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-    public Game(int nRows, int nCols) {
+    public Game(int nRows, int nCols, int chosenGameMode) {
         board = new int[nRows][nCols];
+        gameMode = chosenGameMode;
+        
     }
 
     public int[][] getBoard() {
@@ -88,19 +90,21 @@ public class Game implements GameInterface {
             }
         }
     }
-    public void aiRandomMove(){
-        System.out.println("Hello Dave!");
+    public int[] getAiRandomMove(){
+        System.out.println("Életre keltem!");
         int rows = board.length - 1;
         int cols = board[0].length - 1;
         int [] coordToMark = new int[2];
-        coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows - 1);
-        coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols - 1);
+        coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows + 1);
+        coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols + 1);
         while(!isCoordinateTaken(coordToMark)){
-            coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows - 1);
-            coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols - 1); 
+            coordToMark[0] = ThreadLocalRandom.current().nextInt(0, rows + 1);
+            coordToMark[1] = ThreadLocalRandom.current().nextInt(0, cols + 1);
+            System.out.println(Arrays.toString(coordToMark));
         }
-        System.out.println(Arrays.toString(coordToMark));
-        mark(2, coordToMark[0], coordToMark[1]);
+        latestMove[0] = coordToMark[0];
+        latestMove[1] = coordToMark[1];
+        return coordToMark;
 
     }
     public boolean hasWonRow(int howMany) {
@@ -119,6 +123,7 @@ public class Game implements GameInterface {
                 break;
             }
         }
+        System.out.println(count + "db a sorban"); 
         return (count >= howMany);
     }
 
@@ -138,6 +143,7 @@ public class Game implements GameInterface {
                 break;
             }
         }
+        System.out.println(count + "db az oszlopban");
         return (count >= howMany);
     }
 
@@ -166,33 +172,37 @@ public class Game implements GameInterface {
                 break;
             }
         }
+        System.out.println(count + "db a pozitív átlóban");
         return (count >= howMany);
     }
 
     public boolean hasWonCrossNeg(int howMany) {
         int count = 1;
-        int j = latestMove[0] - 1;
-        for (int i = latestMove[1] + 1; i < board[0].length; i++) {
+        int j = latestMove[1] - 1;
+        for (int i = latestMove[0] + 1; i < board[0].length; i++) {
             if (j < 0) {
                 break;
             } else if (board[latestMove[0]][latestMove[1]] == board[i][j]) {
+                System.out.println("Countot növelő koordináta: " + i + ":" + j);
                 count++;
                 j--;
             } else {
                 break;
             }
         }
-        j = latestMove[0] + 1;
-        for (int i = latestMove[1] - 1; i >= 0; i--) {
+        j = latestMove[1] + 1;
+        for (int i = latestMove[0] - 1; i >= 0; i--) {
             if (j <= board[i].length) {
                 break;
             } else if (board[latestMove[0]][latestMove[1]] == board[i][j]) {
+                System.out.println("Countot növelő koordináta: " + i + ":" + j);
                 count++;
                 j++;
             } else {
                 break;
             }
         }
+        System.out.println(count + "db a negatív átlóban");
         return (count >= howMany);
     }
 
@@ -251,14 +261,18 @@ public class Game implements GameInterface {
             if (hasWon(1, howMany)) {
                 break;
             }
-            
-            System.out.println("O's turn!");
-            int[] coords = getMove(2);
-            mark(2, coords[0], coords[1]);
+            if (gameMode == 1){
+                System.out.println("O's turn!");
+                coordinate = getMove(2);
+            } else if (gameMode == 2){
+                coordinate = getAiRandomMove();
+            }
+            mark(2, coordinate[0], coordinate[1]);
             printBoard();
             if (hasWon(2, howMany)) {
                 break;
             }
+            
         }
         playAnotherGame();
 
