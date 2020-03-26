@@ -264,7 +264,6 @@ public class Game implements GameInterface {
                 } catch (Exception ignored){
                 }
             }
-
             if(count == howMany - 1 && refreshCoordinate){
                 return true;
             }
@@ -272,11 +271,40 @@ public class Game implements GameInterface {
         return false;
     }
 
+    public boolean checkCols(int[] move, int player, int howMany) {
+        boolean refreshCoordinate = false;
+        for (int i = move[0] - howMany + 1; i <= move[0]; i++){
+            int count = 0;
+            for (int j = i; j <= i + howMany - 1; j++){
+                try{
+                    if(board[j][move[1]] == player){
+                        count++;
+                    } else if (board[j][move[1]] == 0){
+                        globalCoordinate[0] = j;
+                        globalCoordinate[1] = move[1];
+                        refreshCoordinate = true;
+                    }
+                } catch (Exception ignored){
+                }
+            }
+            if(count == howMany - 1 && refreshCoordinate){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean checkDanger(int howMany) {
         if (checkRows(aiLatestMove, 2, howMany)) {
             return true;
-        } else return checkRows(latestMove, 1, howMany);
+        } else if (checkCols(aiLatestMove, 2, howMany)){
+            return true;
+        } else if (checkRows(latestMove, 1, howMany)){
+            return true;
+        } else if (checkCols(latestMove, 1, howMany)){
+            return true;
+        }
+        return false;
     }
 
     public void play(int howMany) {
