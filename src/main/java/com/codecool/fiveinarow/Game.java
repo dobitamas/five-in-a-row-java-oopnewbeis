@@ -389,6 +389,12 @@ public class Game implements GameInterface {
                 System.out.println("O's turn!");
                 globalCoordinate = getMove(2);
             } else if (gameMode == 2) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 if (!checkDanger(howMany)) {
                     globalCoordinate = getAiRandomMove();
                 }
