@@ -191,7 +191,7 @@ public class Game implements GameInterface {
         }
         j = latestMove[1] + 1;
         for (int i = latestMove[0] - 1; i >= 0; i--) {
-            if (j <= board[i].length) {
+            if (j >= board[i].length) {
                 break;
             } else if (board[latestMove[0]][latestMove[1]] == board[i][j]) {
                 count++;
@@ -219,7 +219,11 @@ public class Game implements GameInterface {
         System.out.print("\033[H\033[2J");
         System.out.print("  ");
         for (int i = 1; i < board[0].length; i++) {
-            System.out.print(i + " ");
+            if (i < 10) {
+                System.out.print(" " + i + " ");
+            } else {
+                System.out.print(i + " ");
+            }
         }
         System.out.println(board[0].length);
         for (int i = 0; i < board.length; i++) {
@@ -227,13 +231,13 @@ public class Game implements GameInterface {
             for (int cell : board[i]) {
                 switch (cell) {
                     case 1:
-                        System.out.print("X ");
+                        System.out.print(" X ");
                         break;
                     case 2:
-                        System.out.print("O ");
+                        System.out.print(" O ");
                         break;
                     default:
-                        System.out.print(". ");
+                        System.out.print(" . ");
                 }
             }
             System.out.println();
@@ -250,21 +254,21 @@ public class Game implements GameInterface {
 
     public boolean checkRows(int[] move, int player, int howMany) {
         boolean refreshCoordinate = false;
-        for (int i = move[1] - howMany + 1; i <= move[1]; i++){
+        for (int i = move[1] - howMany + 1; i <= move[1]; i++) {
             int count = 0;
-            for (int j = i; j <= i + howMany - 1; j++){
-                try{
-                    if(board[move[0]][j] == player){
+            for (int j = i; j <= i + howMany - 1; j++) {
+                try {
+                    if (board[move[0]][j] == player) {
                         count++;
-                    } else if (board[move[0]][j] == 0){
+                    } else if (board[move[0]][j] == 0) {
                         globalCoordinate[0] = move[0];
                         globalCoordinate[1] = j;
                         refreshCoordinate = true;
                     }
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
             }
-            if(count == howMany - 1 && refreshCoordinate){
+            if (count == howMany - 1 && refreshCoordinate) {
                 return true;
             }
         }
@@ -273,21 +277,21 @@ public class Game implements GameInterface {
 
     public boolean checkCols(int[] move, int player, int howMany) {
         boolean refreshCoordinate = false;
-        for (int i = move[0] - howMany + 1; i <= move[0]; i++){
+        for (int i = move[0] - howMany + 1; i <= move[0]; i++) {
             int count = 0;
-            for (int j = i; j <= i + howMany - 1; j++){
-                try{
-                    if(board[j][move[1]] == player){
+            for (int j = i; j <= i + howMany - 1; j++) {
+                try {
+                    if (board[j][move[1]] == player) {
                         count++;
-                    } else if (board[j][move[1]] == 0){
+                    } else if (board[j][move[1]] == 0) {
                         globalCoordinate[0] = j;
                         globalCoordinate[1] = move[1];
                         refreshCoordinate = true;
                     }
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
             }
-            if(count == howMany - 1 && refreshCoordinate){
+            if (count == howMany - 1 && refreshCoordinate) {
                 return true;
             }
         }
@@ -297,24 +301,51 @@ public class Game implements GameInterface {
     public boolean checkCrossPos(int[] move, int player, int howMany) {
         boolean refreshCoordinate = false;
         int starterY = move[1] - howMany + 1;
-        for (int i = move[0] - howMany + 1; i <= move[0]; i++){
+        for (int i = move[0] - howMany + 1; i <= move[0]; i++) {
             int count = 0;
             int y = starterY;
-            for (int j = i; j <= i + howMany - 1; j++){
-                try{
-                    if(board[j][y] == player){
+            for (int j = i; j <= i + howMany - 1; j++) {
+                try {
+                    if (board[j][y] == player) {
                         count++;
-                    } else if (board[j][y] == 0){
+                    } else if (board[j][y] == 0) {
                         globalCoordinate[0] = j;
                         globalCoordinate[1] = y;
                         refreshCoordinate = true;
                     }
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
                 y++;
             }
             starterY++;
-            if(count == howMany - 1 && refreshCoordinate){
+            if (count == howMany - 1 && refreshCoordinate) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkCrossNeg(int[] move, int player, int howMany) {
+        boolean refreshCoordinate = false;
+        int starterY = move[1] + howMany - 1;
+        for (int i = move[0] - howMany + 1; i <= move[0]; i++) {
+            int count = 0;
+            int y = starterY;
+            for (int j = i; j <= i + howMany - 1; j++) {
+                try {
+                    if (board[j][y] == player) {
+                        count++;
+                    } else if (board[j][y] == 0) {
+                        globalCoordinate[0] = j;
+                        globalCoordinate[1] = y;
+                        refreshCoordinate = true;
+                    }
+                } catch (Exception ignored) {
+                }
+                y--;
+            }
+            starterY--;
+            if (count == howMany - 1 && refreshCoordinate) {
                 return true;
             }
         }
@@ -322,18 +353,24 @@ public class Game implements GameInterface {
     }
 
     public boolean checkDanger(int howMany) {
-        if (checkRows(aiLatestMove, 2, howMany)) {
-            return true;
-        } else if (checkCols(aiLatestMove, 2, howMany)){
-            return true;
-        } else if (checkCrossPos(aiLatestMove, 2, howMany)){
-            return true;
-        } else if (checkRows(latestMove, 1, howMany)){
-            return true;
-        } else if (checkCols(latestMove, 1, howMany)){
-            return true;
-        } else if (checkCrossPos(latestMove, 1, howMany)){
-            return true;
+        for (int i = howMany; i > 0; i--) {
+            if (checkRows(aiLatestMove, 2, i)) {
+                return true;
+            } else if (checkCols(aiLatestMove, 2, i)) {
+                return true;
+            } else if (checkCrossPos(aiLatestMove, 2, i)) {
+                return true;
+            } else if (checkCrossNeg(aiLatestMove, 2, i)) {
+                return true;
+            } else if (checkRows(latestMove, 1, i)) {
+                return true;
+            } else if (checkCols(latestMove, 1, i)) {
+                return true;
+            } else if (checkCrossPos(latestMove, 1, i)) {
+                return true;
+            } else if (checkCrossNeg(latestMove, 1, i)) {
+                return true;
+            }
         }
         return false;
     }
