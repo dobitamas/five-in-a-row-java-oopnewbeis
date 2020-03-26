@@ -11,6 +11,8 @@ public class Game implements GameInterface {
     private int[][] board;
     private int[] latestMove = new int[2];
     private String alphabet = "abcdefghijklmnopqrstuvwxyz";
+    private int[] aiLatestMove = new int[2];
+    public int [] globalCoordinate = new int[2];
 
     public Game(int nRows, int nCols, int chosenGameMode) {
         board = new int[nRows][nCols];
@@ -105,8 +107,9 @@ public class Game implements GameInterface {
         latestMove[0] = coordToMark[0];
         latestMove[1] = coordToMark[1];
         return coordToMark;
-
     }
+    
+    
     public boolean hasWonRow(int howMany) {
         int count = 1;
         for (int i = latestMove[1] + 1; i < board[latestMove[0]].length; i++) {
@@ -250,24 +253,74 @@ public class Game implements GameInterface {
 
     public void enableAi(int player) {
     }
-
+    
+    public boolean checkRows(int[] move, int player, int howMany){
+        boolean refreshCoord = false;
+        for (int i = move[1] - howMany; i < move[1]; i++){
+            int count = 0;
+            for (int j = i; j < i + howMany; j++){
+                try{
+                    System.out.println("Ezt vizsgálom: " + board[move[0]][j]);
+                    if(board[move[0]][j] == player){
+                        count++;
+                    } else if (board[move[0]][j] == 0){
+                        System.out.println("Beléptem Check Row");
+                        globalCoordinate[0] = move[0];
+                        globalCoordinate[1] = j;
+                        refreshCoord = true;
+                        System.out.print(globalCoordinate[0]);
+                        System.out.println(globalCoordinate[1]);
+                    }
+                } catch (Exception e){
+                    continue;
+                }
+            }
+            System.out.println("Count : " + count);
+            System.out.println("How many: " + howMany);
+            if(count == howMany - 1 && refreshCoord == true){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkDanger(int howMany) {
+        if (checkRows(aiLatestMove, 2, howMany)){
+            return true;
+        } else if (checkRows(latestMove, 1, howMany)){
+            return true;
+        }
+        return false;
+    }
+    
     public void play(int howMany) {
         printBoard();
         while (!isFull()) {
+            System.out.println("Ez a latestMove: " + Arrays.toString(latestMove));
+            System.out.println("Ez a globalCoord: " + Arrays.toString(globalCoordinate));
             System.out.println("X's turn!");
-            int[] coordinate = getMove(1);
-            mark(1, coordinate[0], coordinate[1]);
+            globalCoordinate = getMove(1);
+            mark(1, globalCoordinate[0], globalCoordinate[1]);
             printBoard();
             if (hasWon(1, howMany)) {
                 break;
             }
             if (gameMode == 1){
                 System.out.println("O's turn!");
-                coordinate = getMove(2);
+                globalCoordinate = getMove(2);
             } else if (gameMode == 2){
-                coordinate = getAiRandomMove();
+                System.out.println(checkDanger(howMany));
+                if (checkDanger(howMany)){
+                
+                    System.out.println(checkDanger(howMany));
+                    ;
+                } else {
+                    globalCoordinate = getAiRandomMove();
+                }
+                aiLatestMove = globalCoordinate;
+                latestMove = aiLatestMove;
             }
-            mark(2, coordinate[0], coordinate[1]);
+            mark(2, globalCoordinate[0], globalCoordinate[1]);
             printBoard();
             if (hasWon(2, howMany)) {
                 break;
@@ -285,9 +338,4 @@ public class Game implements GameInterface {
     public boolean isCoordinateTaken(int[] coordinate) {
         return (board[coordinate[0]][coordinate[1]] == 0);
     }
-
-    
-
-
-
 }
