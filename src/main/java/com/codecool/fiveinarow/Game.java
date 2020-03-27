@@ -34,7 +34,7 @@ public class Game implements GameInterface {
         int[] coordinate = new int[2];
         while (!coordinateExist || !coordinateEmpty) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter coordinates:");
+            System.out.println("Enter coordinates (RowColumn)!");
             String coordinates = scanner.nextLine();
             String col = coordinates.substring(0, 1).toLowerCase();
             try {
@@ -50,7 +50,7 @@ public class Game implements GameInterface {
                     System.out.println("See you later!");
                     System.exit(0);
                 }
-                System.out.println("Please enter valid coordinates!");
+                System.out.println("Please enter valid coordinates (RowColumn)!");
             }
 
         }
@@ -88,7 +88,7 @@ public class Game implements GameInterface {
                 System.exit(0);
                 return true;
             } else {
-                System.out.println("\nPlease answer in format : (Y/N)");
+                System.out.println("\nPlease answer in format : (Y/N)!");
             }
         }
     }
@@ -212,6 +212,7 @@ public class Game implements GameInterface {
                 }
             }
         }
+        System.out.println("\nIt's a tie!");
         return true;
     }
 
@@ -382,7 +383,7 @@ public class Game implements GameInterface {
             globalCoordinate = getMove(1);
             mark(1, globalCoordinate[0], globalCoordinate[1]);
             printBoard();
-            if (hasWon(1, howMany)) {
+            if (hasWon(1, howMany) || isFull()) {
                 break;
             }
             if (gameMode == 1) {
@@ -403,7 +404,7 @@ public class Game implements GameInterface {
             }
             mark(2, globalCoordinate[0], globalCoordinate[1]);
             printBoard();
-            if (hasWon(2, howMany)) {
+            if (hasWon(2, howMany) || isFull()) {
                 break;
             }
 
